@@ -5,5 +5,5 @@
 
 int main()
 {
-    Scene::Initialize("something");
+    Scene::Initialize("../scenes/input01.xml");
 }
