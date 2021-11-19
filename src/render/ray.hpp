@@ -9,14 +9,12 @@ class Ray
 public:
 	Eigen::Vector3f origin;
 	Eigen::Vector3f direction;
-	float time;
 
-	Ray(float time);
-	Ray(const Eigen::Vector3f& origin, const Eigen::Vector3f& direction, float time);
-	void SetTime(float time);
+	Ray();
+	Ray(const Eigen::Vector3f& origin, const Eigen::Vector3f& direction);
 
-	Eigen::Vector3f getPoint(float t) const;
-	float gett(const Eigen::Vector3f & p) const;
+	Eigen::Vector3f GetPoint(float t) const;
+	float GetT(const Eigen::Vector3f& p) const;
 
 private:
 

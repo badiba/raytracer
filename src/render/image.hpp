@@ -6,28 +6,23 @@
 
 #include "../defs.hpp"
 
-typedef union Color
+struct Color
 {
-    struct
-    {
-        unsigned char red;
-        unsigned char grn;
-        unsigned char blu;
-    };
-
-    unsigned char channel[3];
-} Color;
+    unsigned char r;
+    unsigned char g;
+    unsigned char b;
+};
 
 class Image
 {
 public:
-    Color** data;
+    std::vector<std::vector<Color>> pixels;
 	int width;
 	int height;
 
 	Image(int width, int height);
-	void setPixelValue(int col, int row, const Color& color);
-	void saveImage(const char *imageName) const;
+	void SetPixelValue(int col, int row, const Color& color);
+	void SaveImage(const char *imageName) const;
 };
 
 #endif

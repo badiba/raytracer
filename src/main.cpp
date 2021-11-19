@@ -5,5 +5,7 @@
 
 int main()
 {
-    Scene::Initialize("../scenes/input01.xml");
+    auto& scene = Scene::Instance();
+    scene.Initialize("E:\\raytracer\\scenes\\input01.xml");
+    scene.Render();
 }

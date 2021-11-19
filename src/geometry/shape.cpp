@@ -6,8 +6,7 @@ Shape::Shape()
 
 }
 
-Shape::Shape(int id, int materialIndex)
-    : id(id), materialIndex(materialIndex)
+Shape::Shape(int id, int materialIndex) : id(id), materialIndex(materialIndex)
 {
 
 }

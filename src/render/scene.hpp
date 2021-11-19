@@ -13,6 +13,7 @@
 #include "camera.hpp"
 #include "light.hpp"
 #include "material.hpp"
+#include "image.hpp"
 #include "../geometry/shape.hpp"
 #include "../defs.hpp"
 #include "../dependencies/eigen-3.4.0/Eigen/Dense"
@@ -27,26 +28,31 @@ public:
 		return instance;
 	}
 
-	static void Initialize(const char *xmlPath);
-	void RenderScene();
+	void Initialize(const char *xmlPath);
+	void Render();
 
 	Scene(Scene const&) = delete;
 	void operator=(Scene const&) = delete;
 
-	int max_recursion_depth_;
-	float int_test_eps_;
-	float shadow_ray_eps_;
-	Eigen::Vector3f background_color_;
-	Eigen::Vector3f ambient_light_;
+	int maxRecursionDepth;
+	float intTestEps;
+	float shadowRayEps;
+	Eigen::Vector3f backgroundColor;
+	Eigen::Vector3f ambientLight;
 
-	std::vector<std::shared_ptr<Camera>> cameras_;
-	std::vector<std::shared_ptr<PointLight>> lights_;
-	std::vector<std::shared_ptr<Material>> materials_;
-	std::vector<Eigen::Vector3f> vertices_;
-	std::vector<std::shared_ptr<Shape>> shapes_;
+	std::vector<std::shared_ptr<Camera>> cameras;
+	std::vector<std::shared_ptr<PointLight>> lights;
+	std::vector<std::shared_ptr<Material>> materials;
+	std::vector<Eigen::Vector3f> vertices;
+	std::vector<std::shared_ptr<Shape>> shapes;
 
 private:
     Scene() {}
+	bool IsShadow(Eigen::Vector3f point, const PointLight& light);
+	Eigen::Vector3f GetSpecularContribution(Ray ray, Intersection intersection, const Material& mat, const PointLight& light);
+	Eigen::Vector3f GetDiffuseContribution(Intersection intersection, const Material& mat, Ray ray, const PointLight& light);
+	Eigen::Vector3f GetAmbientContribution(const Material& mat);
+	Color GetShadingColor(Ray ray, Intersection intersection, const Material& mat);
 };
 
 #endif

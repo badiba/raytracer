@@ -5,7 +5,7 @@
 
 struct Intersection
 {
-    bool full;
+    bool intersected = false;
     Eigen::Vector3f point;
     Eigen::Vector3f normal;
 };

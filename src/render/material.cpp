@@ -1,4 +1,6 @@
 #include "material.hpp"
 
-Material::Material(void)
-{}
+Material::Material()
+{
+    
+}

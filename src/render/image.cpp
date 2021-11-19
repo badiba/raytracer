@@ -1,23 +1,28 @@
 #include "image.hpp"
 
-Image::Image(int width, int height)
-    : width(width), height(height)
+Image::Image(int width, int height) : width(width), height(height)
 {
-    data = new Color* [height];
-
-    for (int y = 0; y < height; ++y)
+    for (auto i = 0; i < height; i++)
     {
-        data[y] = new Color [width];
+        pixels.push_back(std::vector<Color>(width));
     }
 }
 
-void Image::setPixelValue(int col, int row, const Color& color)
+void Image::SetPixelValue(int col, int row, const Color& color)
 {
-    data[row][col] = color;
+    if (row < height && row >= 0 && col < width && col >= 0)
+    {
+        pixels[row][col] = color;
+    }
+    else
+    {
+        // TODO: warn
+    }
 }
 
-void Image::saveImage(const char *imageName) const
+void Image::SaveImage(const char *imageName) const
 {
+    // TODO
 	FILE *output;
 
 	output = fopen(imageName, "w");
@@ -25,14 +30,14 @@ void Image::saveImage(const char *imageName) const
 	fprintf(output, "%d %d\n", width, height);
 	fprintf(output, "255\n");
 
-	for(int y = 0 ; y < height; y++)
+	for (auto y = 0 ; y < height; y++)
 	{
-		for(int x = 0 ; x < width; x++)
+		for (auto x = 0 ; x < width; x++)
         {
-            for (int c = 0; c < 3; ++c)
-            {
-                fprintf(output, "%d ", data[y][x].channel[c]);
-            }
+            auto pixel = pixels[y][x];
+            fprintf(output, "%d ", pixel.r);
+            fprintf(output, "%d ", pixel.g);
+            fprintf(output, "%d ", pixel.b);
         }
 
 		fprintf(output, "\n");

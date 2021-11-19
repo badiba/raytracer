@@ -9,12 +9,11 @@ class PointLight
 public:	
     Eigen::Vector3f position;
 
-    PointLight(const Eigen::Vector3f & position, const Eigen::Vector3f & intensity);
-    Eigen::Vector3f computeLightContribution(const Eigen::Vector3f& p);
+    PointLight(const Eigen::Vector3f& position, const Eigen::Vector3f& intensity);
+    Eigen::Vector3f ComputeLightContribution(const Eigen::Vector3f& p) const;
 
 private:
     Eigen::Vector3f intensity;
 };
-
 
 #endif
