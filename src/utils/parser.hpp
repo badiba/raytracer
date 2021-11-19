@@ -265,7 +265,7 @@ namespace Parser
 					}
 				}
 
-				faces.push_back(*(new Triangle(-1, matIndex, p1Index, p2Index, p3Index)));
+				faces.push_back(Triangle(-1, matIndex, p1Index, p2Index, p3Index));
 			}
 
 			shapes.push_back(std::make_shared<Mesh>(id, matIndex, faces));
