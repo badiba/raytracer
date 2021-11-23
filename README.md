@@ -2,6 +2,10 @@
 
 This page includes technical information and personal experiences on the homeworks of CENG795 Advanced Ray Tracing class.
 
+![alt text](https://github.com/badiba/raytracer/assets/hw1-bunny-correct.jpg?raw=true)
+
+> Bunny Scene
+
 # Content
 
 This section includes different versions of the Ray Tracer. Each version has it's own subsection. These subsections include:
