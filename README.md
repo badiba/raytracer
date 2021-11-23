@@ -1,25 +1,21 @@
 # Introduction
 
-This page includes technical information and personal experiences on the homeworks of CENG795 Advanced Ray Tracing class.
+A C++ ray-tracer that is capable of parsing static scenes, and applying several ray-tracing methods to produce photo-realistic images. Here is a very basic example. More complex ones are available in the [web page](https://badiba.github.io/raytracer/).
 
-![Test][test1]
+![Bunny][bunny]
 
 > Bunny Scene
 
-# Content
-
-This section includes different versions of the Ray Tracer. Each version has it's own subsection. These subsections include:
+This repository is newly created. My goal is to refactor my old code which was written a long time ago, while I was a student. The old repository is available [here](https://github.com/badiba/raytracer-795). Different versions of the Ray Tracer are provided below. Version at the top is the latest. Each version contains:
 
 - Brief explanations of what is being added in that version.
 - Resulting images in that version.
 - What kind of bugs have been encountered and how did I manage to fix them.
 - My personal experiences.
 
-If applicable, time comparisons of different implementations are also added in these subsections.
+If applicable, time comparisons of different implementations are also added.
 
-## Versions
-
-Different versions of the Ray Tracer are provided below. Version at the top is the latest.
+# Versions
 
 [7. Path Tracing](/pages/Page7.md)
 
@@ -35,4 +31,4 @@ Different versions of the Ray Tracer are provided below. Version at the top is t
 
 [1. Basic Ray Tracer](/pages/Page1.md)
 
-[test1]:           /assets/hw1-bunny-correct.jpg
+[bunny]:           /assets/hw1-bunny-correct.jpg
