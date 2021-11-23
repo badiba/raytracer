@@ -35,4 +35,4 @@ Different versions of the Ray Tracer are provided below. Version at the top is t
 
 [1. Basic Ray Tracer](/pages/Page1.md)
 
-[test1]:           /../assets/hw1-bunny-correct.jpg
+[test1]:           /assets/hw1-bunny-correct.jpg
