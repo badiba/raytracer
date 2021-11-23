@@ -2,7 +2,7 @@
 
 This page includes technical information and personal experiences on the homeworks of CENG795 Advanced Ray Tracing class.
 
-![alt text](https://github.com/badiba/raytracer/assets/hw1-bunny-correct.jpg?raw=true)
+![Test][test1]
 
 > Bunny Scene
 
@@ -34,3 +34,5 @@ Different versions of the Ray Tracer are provided below. Version at the top is t
 [2. Recursive Ray Tracing](/pages/Page2.md)
 
 [1. Basic Ray Tracer](/pages/Page1.md)
+
+[test1]:           /../assets/hw1-bunny-correct.jpg
