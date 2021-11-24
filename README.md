@@ -1,12 +1,12 @@
 # Introduction
 
-A C++ ray-tracer that is capable of parsing static scenes, and applying several ray-tracing methods to produce photo-realistic images. Here is a very basic example. More complex ones are available in the [web page](https://badiba.github.io/raytracer/).
+A C++ ray-tracer that is capable of parsing static scenes, and applying several ray-tracing methods to produce photo-realistic images. Here is a very basic example. You may reach all of the resulting images by navigating through the versions below.
 
 ![Sc](/assets/hw1-bunny-correct.jpg)
 
 > Bunny Scene
 
-This repository is newly created. My goal is to refactor my old code which was written a long time ago, while I was a student. Refactoring process is still ongoing. The old repository is available [here](https://github.com/badiba/raytracer-795). Different versions of the Ray Tracer are provided below. Version at the top is the latest. Each version contains:
+This repository is newly created. My goal is to refactor my old code which was written a long time ago. Refactoring process is still ongoing. The old repository is available [here](https://github.com/badiba/raytracer-795). Different versions of the Ray Tracer are provided below. Version at the top is the latest. Each version contains:
 
 - Brief explanations of what is being added in that version.
 - Resulting images in that version.
@@ -15,6 +15,8 @@ This repository is newly created. My goal is to refactor my old code which was w
 - If applicable, time comparisons of different implementations.
 
 # Versions
+
+You can click the links below to open the individual page of a version.
 
 [7. Path Tracing](/pages/Page7.md)
 
