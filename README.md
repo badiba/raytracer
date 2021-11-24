@@ -2,7 +2,7 @@
 
 A C++ ray-tracer that is capable of parsing static scenes, and applying several ray-tracing methods to produce photo-realistic images. Here is a very basic example. More complex ones are available in the [web page](https://badiba.github.io/raytracer/).
 
-![Bunny][/assets/hw1-bunny-correct.jpg]
+![Sc](/assets/hw1-bunny-correct.jpg)
 
 > Bunny Scene
 
