@@ -19,7 +19,7 @@ Basic Ray Tracer supports shadows. Shadow computation is straight-forward. If th
 ### 1.2. Resulting Images
 Here are some scenes rendered with Basic Ray Tracer. Rendering time is also included.
 
-![Sc](/../assets/hw1-simple-correct.jpg)
+![Sc](/assets/hw1-simple-correct.jpg)
 
 > Figure 1.2.1: Simple scene. Time: 0.309s
 
