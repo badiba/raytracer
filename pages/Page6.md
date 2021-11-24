@@ -10,7 +10,7 @@ BRDF (Bidirectional reflectance distribution function) is a function to compute 
 
 In Blinn-Phong we were computing half vector of light and viewing vectors. Then we were using the angle between half vector and normal. In the Phong model, however, we are going to compute reflected vector of light vector on the surface. Then we are going to use the angle between reflection vector and viewing vector in our computation. Below image compares Blinn-Phong and Phong models. Image is taken from [Wikipedia](https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model).
 
-![Sc](/../assets/hw6/hw6-1-1.jpg)
+![Sc](/assets/hw6/hw6-1-1.jpg)
 
 > Figure 6.1.1: Blinn-Phong and Phong comparison.
 
@@ -20,7 +20,7 @@ Torrance-Sparrow BRDF uses the Microfacet model. In Microfacet model, we simply 
 
 Below image shows three important effects of Microfacet model. Masking (a), Shadowing (b), Interreflection (c). Image is taken from [PBRT](http://www.pbr-book.org/3ed-2018/Reflection_Models/Microfacet_Models.html).
 
-![Sc](/../assets/hw6/hw6-1-2.jpg)
+![Sc](/assets/hw6/hw6-1-2.jpg)
 
 > Figure 6.1.2: Geometry of Microfacet model.
 
@@ -34,47 +34,47 @@ BRDF function will be energy conserving when we normalize it. However, normalizi
 
 ### 6.2. Resulting Images
 
-![Sc](/../assets/hw6/hw6-2-1.jpg)
+![Sc](/assets/hw6/hw6-2-1.jpg)
 
 > Figure 6.2.1: Blinn-Phong modified scene. Render time: 0m0,183s Sample count: 1
 
-![Sc](/../assets/hw6/hw6-2-2.jpg)
+![Sc](/assets/hw6/hw6-2-2.jpg)
 
 > Figure 6.2.2: Blinn-Phong modified normalized scene. Render time: 0m0,158s Sample count: 1
 
-![Sc](/../assets/hw6/hw6-2-3.jpg)
+![Sc](/assets/hw6/hw6-2-3.jpg)
 
 > Figure 6.2.3: Blinn-Phong original scene. Render time: 0m0,167s Sample count: 1
 
-![Sc](/../assets/hw6/hw6-2-4.jpg)
+![Sc](/assets/hw6/hw6-2-4.jpg)
 
 > Figure 6.2.4: Phong modified scene. Render time: 0m0,160s Sample count: 1
 
-![Sc](/../assets/hw6/hw6-2-5.jpg)
+![Sc](/assets/hw6/hw6-2-5.jpg)
 
 > Figure 6.2.5: Phong modified normalized scene. Render time: 0m0,162s Sample count: 1
 
-![Sc](/../assets/hw6/hw6-2-6.jpg)
+![Sc](/assets/hw6/hw6-2-6.jpg)
 
 > Figure 6.2.6: Phong original scene. Render time: 0m0,166s Sample count: 1
 
-![Sc](/../assets/hw6/hw6-2-7.jpg)
+![Sc](/assets/hw6/hw6-2-7.jpg)
 
 > Figure 6.2.7: Torrance-Sparrow scene. Render time: 0m0,160s Sample count: 1
 
-![Sc](/../assets/hw6/hw6-2-8.jpg)
+![Sc](/assets/hw6/hw6-2-8.jpg)
 
 > Figure 6.2.8: Killeroo Blinn-Phong scene. Render time: 0m29,838s Sample count: 16
 
-![Sc](/../assets/hw6/hw6-2-9.jpg)
+![Sc](/assets/hw6/hw6-2-9.jpg)
 
 > Figure 6.2.9: Killeroo Blinn-Phong close scene. Render time: 1m6,293s Sample count: 16
 
-![Sc](/../assets/hw6/hw6-2-10.jpg)
+![Sc](/assets/hw6/hw6-2-10.jpg)
 
 > Figure 6.2.10: Killeroo Torrance-Sparrow scene. Render time: 0m33,900s Sample count: 16
 
-![Sc](/../assets/hw6/hw6-2-11.jpg)
+![Sc](/assets/hw6/hw6-2-11.jpg)
 
 > Figure 6.2.11: Killeroo Torrance-Sparrow close scene. Render time: 1m9,586s Sample count: 16
 

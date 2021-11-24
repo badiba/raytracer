@@ -54,31 +54,31 @@ With the help of this operation we will be able to display HDR images on our dis
 
 ### 5.2. Resulting Images
 
-![Sc](/../assets/hw5/hw5-2-1.jpg)
+![Sc](/assets/hw5/hw5-2-1.jpg)
 
 > Figure 5.2.1: cornellbox_area scene. Render time: 0m28,153s Sample count: 100
 
-![Sc](/../assets/hw5/hw5-2-2.jpg)
+![Sc](/assets/hw5/hw5-2-2.jpg)
 
 > Figure 5.2.2: cube_directional scene. Render time: 0m0,668s Sample count: 1
 
-![Sc](/../assets/hw5/hw5-2-3.jpg)
+![Sc](/assets/hw5/hw5-2-3.jpg)
 
 > Figure 5.2.3: cube_point scene. Render time: 0m0,679s Sample count: 1
 
-![Sc](/../assets/hw5/hw5-2-4.jpg)
+![Sc](/assets/hw5/hw5-2-4.jpg)
 
 > Figure 5.2.4: cube_point_hdr scene. Render time: 0m0,320s Sample count: 1
 
-![Sc](/../assets/hw5/hw5-2-5.jpg)
+![Sc](/assets/hw5/hw5-2-5.jpg)
 
 > Figure 5.2.5: dragon_spot_light_msaa scene. Render time: 1m2,212s Sample count: 100
 
-![Sc](/../assets/hw5/hw5-2-6.jpg)
+![Sc](/assets/hw5/hw5-2-6.jpg)
 
 > Figure 5.2.6: head_env_light scene. Render time: 7m37,505s Sample count: 900
 
-![Sc](/../assets/hw5/hw5-2-7.jpg)
+![Sc](/assets/hw5/hw5-2-7.jpg)
 
 > Figure 5.2.7: sphere_point_hdr_texture scene. Render time: 0m0,668s Sample count: 1
 
@@ -88,27 +88,27 @@ There are three bugs that I encountered in the implementation of the current ver
 
 First one is about area lights. Area light class is an abstract class which has derived classes for each type of light. Area light is one of them. As mentioned above, (5.1.c) we take a sample on area light to find the contribution of the whole area. I somehow thought that it would be a good idea to put this sample point as a vector in the private field of the class. I thought that I would prevent the creation and destruction of this variable many times and it would be good for the performance. However, since we have multithreading in our ray tracer, this single vector will be a shared data among these threads. Therefore, a race condition happens. One of the threads takes a sample and then while it is doing its shading computation, other threads take control and change that same sample vector. And this obviously prevents the former thread to have the correct result. Solution was simple. I removed the shared data and use the sample vector as a local variable inside the function call. Buggy image is shared below.
 
-![Sc](/../assets/hw5/hw5-3-1.jpg)
+![Sc](/assets/hw5/hw5-3-1.jpg)
 
 > Figure 5.3.1: Arealight race condition 
 
 Second one is about environment lights. Just like in the area lights, we need to sample the environment light to find the total contribution. In order to do this, we have to sample a direction for each intersection, and use this direction to find the radiance value coming from the HDR image. While doing this, I got confused about the which coordinate system I should use to fetch color from the image. I was using the u-v-w coordinate system first. This was wrong since at every intersection point I was creating a new coordinate system and then make a lookup from the image. This was wrong since orientation of surface was affecting my lookup which is not meaningful. Radiance coming from the image shouldn't depend on the normal at the intersection point (Why would environment change when you rotate an object?). You can find the buggy image below.
 
-![Sc](/../assets/hw5/hw5-3-2.jpg)
+![Sc](/assets/hw5/hw5-3-2.jpg)
 
 > Figure 5.3.2: Environment light wrong lookup 
 
 Third one is about tonemapping. I don't know the reason of this problem because I couldn't solve it. However, I can tell that this problem is more apparent when the luminance of pixels change severely. For example, when the image has black background, my tonemapper gives brighter results. Here are some buggy images.
 
-![Sc](/../assets/hw5/hw5-3-3.jpg)
+![Sc](/assets/hw5/hw5-3-3.jpg)
 
 > Figure 5.3.3: cube_point_hdr tonemapped 
 
-![Sc](/../assets/hw5/hw5-3-4.jpg)
+![Sc](/assets/hw5/hw5-3-4.jpg)
 
 > Figure 5.3.4: head_env_light tonemapped
 
-![Sc](/../assets/hw5/hw5-3-5.jpg)
+![Sc](/assets/hw5/hw5-3-5.jpg)
 
 > Figure 5.3.5: sphere_point_hdr_texture tonemapped
 
@@ -118,6 +118,6 @@ After I finished this version, I remembered the first time I had a shadow in my 
 
 In the last version, I said that we need directional light in our Moon scene to have a better result. Since we have the support for directional lights, here is the result of the same Moon scene with directional light.
 
-![Sc](/../assets/hw5/hw5-4-1.jpg)
+![Sc](/assets/hw5/hw5-4-1.jpg)
 
 > Figure 5.4.1: Moon with directional light
