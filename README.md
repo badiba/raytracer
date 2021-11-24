@@ -30,4 +30,4 @@ This repository is newly created. My goal is to refactor my old code which was w
 
 [1. Basic Ray Tracer](/pages/Page1.md)
 
-[bunny]:           https://github.com/badiba/raytracer/assets/hw1-bunny-correct.jpg
+[bunny]:           https://github.com/badiba/raytracer/blobs/assets/hw1-bunny-correct.jpg
