@@ -3,9 +3,9 @@
 #include <memory>
 #include "render/scene.hpp"
 
-int main()
+int main(int argc, char* argv[])
 {
     auto& scene = Scene::Instance();
-    scene.Initialize("E:\\raytracer\\scenes\\input01.xml");
+    scene.Initialize(argv[1]);
     scene.Render();
 }

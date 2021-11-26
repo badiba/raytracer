@@ -6,7 +6,7 @@
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceFolder}\\raytracer.exe",
-        "args": [],
+        "args": ["${workspaceFolder}\\..\\scenes\\input01.xml"],
         "stopAtEntry": false,
         "cwd": "${fileDirname}",
         "environment": [],
