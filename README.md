@@ -8,9 +8,9 @@ A C++ ray-tracer that is capable of parsing static scenes, and applying several 
 
 This repository is newly created. My goal is to refactor my old code which was written a long time ago. Refactoring process is still ongoing. The old repository is available [here](https://github.com/badiba/raytracer-795). Different versions of the Ray Tracer are provided below. Version at the top is the latest. Each version contains:
 
-- Brief explanations of what is being added in that version.
-- Resulting images in that version.
-- What kind of bugs have been encountered and how did I manage to fix them.
+- Brief explanations of what is being added.
+- Resulting images.
+- Bugs that I have encountered and my solutions to them.
 - My personal experiences.
 - If applicable, time comparisons of different implementations.
 
