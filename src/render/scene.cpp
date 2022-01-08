@@ -35,60 +35,50 @@ bool Scene::IsShadow(const Vector3f& point, const PointLight& light)
     return false;
 }
 
-Vector3f Scene::GetSpecularContribution(Ray ray, Intersection intersection, const Material& mat, const PointLight& light)
+Vector3f Scene::GetSpecularContribution(const Ray& ray, const Intersection& intersection, const Material& mat, const PointLight& light)
 {
-    auto wo = -ray.direction;
-    auto wi = (light.position - intersection.point) / (light.position - intersection.point).norm();
-    auto h = (wo + wi) / (wo + wi).norm();
-    auto nh = intersection.normal.dot(h);
-    auto alpha = std::max(0.0f, nh);
+    Vector3f wo = -ray.direction;
+    Vector3f wi = (light.position - intersection.point).normalized();
+    Vector3f h = (wo + wi).normalized();
+    float nh = intersection.normal.dot(h);
+    float alpha = std::max(0.0f, nh);
 
-    auto specularColor = light.ComputeLightContribution(intersection.point).cwiseProduct(mat.specularRef * pow(alpha, mat.phongExp));
-    return specularColor;
+    return light.ComputeLightContribution(intersection.point).cwiseProduct(mat.specularRef * pow(alpha, mat.phongExp));
 }
 
-Vector3f Scene::GetDiffuseContribution(Intersection intersection, const Material& mat, Ray ray, const PointLight& light)
+Vector3f Scene::GetDiffuseContribution(const Intersection& intersection, const Material& mat, const Ray& ray, const PointLight& light)
 {
-    // Compute diffuse color at given point with given light.
-    Vector3f wi = (light.position - intersection.point) / (light.position - intersection.point).norm();
-    auto nh = intersection.normal.dot(wi);
-    auto alpha = std::max(0.0f, nh);
+    Vector3f wi = (light.position - intersection.point).normalized();
+    float nh = intersection.normal.dot(wi);
+    float alpha = std::max(0.0f, nh);
 
-    Vector3f diffuseColor = (light.ComputeLightContribution(intersection.point).cwiseProduct(mat.diffuseRef * alpha));
-    return diffuseColor;
+    return (light.ComputeLightContribution(intersection.point).cwiseProduct(mat.diffuseRef * alpha));
 }
 
 Vector3f Scene::GetAmbientContribution(const Material& mat)
 {
-    // Create new ambient raw color (not bounded to 255).
-    auto ambientColor = Vector3f(0, 0, 0);
-
-    // Compute ambient color with given material coefficient.
-    ambientColor += ambientLight.cwiseProduct(mat.ambientRef);
-    return ambientColor;
+    return ambientLight.cwiseProduct(mat.ambientRef);
 }
 
-Color Scene::GetShadingColor(Ray ray, Intersection intersection, const Material& mat)
+Color Scene::GetShadingColor(const Ray& ray, const Intersection& intersection, const Material& mat)
 {
     // Compute ambient color (no shadow check).
-    auto rawColor = GetAmbientContribution(mat);
+    Vector3f rawColor = GetAmbientContribution(mat);
 
     // Check shadows for diffuse and specular shading (for every light source).
     for (const auto& light : lights)
     {
-        if (IsShadow(intersection.point, light))
+        if (!IsShadow(intersection.point, light))
         {
-            continue;
+            // No shadow for this light: Add diffuse and specular shading color.
+            rawColor += GetDiffuseContribution(intersection, mat, ray, light);
+            rawColor += GetSpecularContribution(ray, intersection, mat, light);
         }
-
-        // No shadow for this light: Add diffuse and specular shading color.
-        rawColor += GetDiffuseContribution(intersection, mat, ray, light);
-        rawColor += GetSpecularContribution(ray, intersection, mat, light);
     }
 
-    // Clamp and return.
+    // Clamp to 255.
     rawColor = rawColor.cwiseMin(255);
-    auto clampedColor = Color{ (unsigned char)(rawColor(0)), (unsigned char)(rawColor(1)), (unsigned char)(rawColor(2)) };
+    Color clampedColor{ (unsigned char)(rawColor(0)), (unsigned char)(rawColor(1)), (unsigned char)(rawColor(2)) };
     return clampedColor;
 }
 
@@ -97,37 +87,37 @@ void Scene::Render()
 	// Save an image for all cameras.
     for (const auto& camera : cameras)
     {
-        auto ray = Ray();
-        auto width = camera.imgPlane.nx;
-        auto height = camera.imgPlane.ny;
-        auto image = Image(width, height);
+        Ray ray;
+        int width = camera.imgPlane.nx;
+        int height = camera.imgPlane.ny;
+        Image image(width, height);
 
         // For every pixel create a ray.
-        for (auto i = 0; i < camera.imgPlane.nx; i++)
+        for (int i = 0; i < camera.imgPlane.nx; i++)
         {
-            for (auto j = 0; j < camera.imgPlane.ny; j++)
+            for (int j = 0; j < camera.imgPlane.ny; j++)
             {
                 ray = camera.GetPrimaryRay(i, j);
 
-                auto intersection = Intersection();
-                auto nearestIntersection = Intersection();
-                auto returnDistance = 0.0f;
-                auto nearestPoint = std::numeric_limits<float>::max();
-                auto nearestObjectIndex = 0;
+                Intersection intersection;
+                Intersection nearestIntersection;
+                float returnDistance = 0.0f;
+                float smallestReturnDistance = std::numeric_limits<float>::max();
+                int nearestObjectIndex = 0;
 
                 // Check intersection of the ray with all objects.
-                for (auto k = 0; k < shapes.size(); k++)
+                for (int k = 0; k < shapes.size(); k++)
                 {
                     auto& shape = shapes[k];
                     intersection = shape->Intersect(ray);
                     if (intersection.intersected)
                     {
                         // Save the nearest intersected object.
-                        returnDistance = (intersection.point - ray.origin).norm();
-                        if (returnDistance < nearestPoint)
+                        returnDistance = (intersection.point - ray.origin).squaredNorm();
+                        if (returnDistance < smallestReturnDistance)
                         {
                             nearestObjectIndex = k;
-                            nearestPoint = returnDistance;
+                            smallestReturnDistance = returnDistance;
                             nearestIntersection = intersection;
                         }
                     }

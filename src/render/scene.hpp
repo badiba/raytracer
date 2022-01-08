@@ -49,10 +49,10 @@ public:
 private:
 	Scene() {}
 	bool IsShadow(const Eigen::Vector3f& point, const PointLight& light);
-	Eigen::Vector3f GetSpecularContribution(Ray ray, Intersection intersection, const Material& mat, const PointLight& light);
-	Eigen::Vector3f GetDiffuseContribution(Intersection intersection, const Material& mat, Ray ray, const PointLight& light);
+	Eigen::Vector3f GetSpecularContribution(const Ray& ray, const Intersection& intersection, const Material& mat, const PointLight& light);
+	Eigen::Vector3f GetDiffuseContribution(const Intersection& intersection, const Material& mat, const Ray& ray, const PointLight& light);
 	Eigen::Vector3f GetAmbientContribution(const Material& mat);
-	Color GetShadingColor(Ray ray, Intersection intersection, const Material& mat);
+	Color GetShadingColor(const Ray& ray, const Intersection& intersection, const Material& mat);
 };
 
 #endif
