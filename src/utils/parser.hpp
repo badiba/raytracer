@@ -34,7 +34,7 @@ namespace Parser
 		sscanf_s(str, "%f %f %f", &value[0], &value[1], &value[2]);
     }
 
-    void ParseCameras(tinyxml2::XMLNode* node, std::vector<std::shared_ptr<Camera>>& cameras)
+    void ParseCameras(tinyxml2::XMLNode* node, std::vector<Camera>& cameras)
     {
         auto pElement = node->FirstChildElement("Cameras");
 		auto pCamera = pElement->FirstChildElement("Camera");
@@ -66,13 +66,13 @@ namespace Parser
 			str = camElement->GetText();
 			strcpy_s(imageName, str);
 
-			cameras.push_back(std::make_shared<Camera>(id, imageName, pos, gaze, up, imgPlane));
+			cameras.push_back(Camera(id, imageName, pos, gaze, up, imgPlane));
 
 			pCamera = pCamera->NextSiblingElement("Camera");
 		}
     }
 
-    void ParseMaterials(tinyxml2::XMLNode* node, std::vector<std::shared_ptr<Material>>& materials)
+    void ParseMaterials(tinyxml2::XMLNode* node, std::vector<Material>& materials)
     {
         auto pElement = node->FirstChildElement("Materials");
 		auto pMaterial = pElement->FirstChildElement("Material");
@@ -80,38 +80,38 @@ namespace Parser
 
 		while (pMaterial != nullptr)
 		{
-			materials.push_back(std::make_shared<Material>());
+			materials.push_back(Material());
 			int curr = materials.size() - 1;
 		
-			pMaterial->QueryIntAttribute("id", &materials[curr]->id);
-            ParseVector3Property(pMaterial, materials[curr]->ambientRef, "AmbientReflectance");
-            ParseVector3Property(pMaterial, materials[curr]->diffuseRef, "DiffuseReflectance");
-            ParseVector3Property(pMaterial, materials[curr]->specularRef, "SpecularReflectance");
+			pMaterial->QueryIntAttribute("id", &materials[curr].id);
+            ParseVector3Property(pMaterial, materials[curr].ambientRef, "AmbientReflectance");
+            ParseVector3Property(pMaterial, materials[curr].diffuseRef, "DiffuseReflectance");
+            ParseVector3Property(pMaterial, materials[curr].specularRef, "SpecularReflectance");
 
 			materialElement = pMaterial->FirstChildElement("MirrorReflectance");
 			if (materialElement != nullptr)
 			{
 				auto str = materialElement->GetText();
-				sscanf_s(str, "%f %f %f", &materials[curr]->mirrorRef[0], &materials[curr]->mirrorRef[1], &materials[curr]->mirrorRef[2]);
+				sscanf_s(str, "%f %f %f", &materials[curr].mirrorRef[0], &materials[curr].mirrorRef[1], &materials[curr].mirrorRef[2]);
 			}
 			else
 			{
-				materials[curr]->mirrorRef[0] = 0.0;
-				materials[curr]->mirrorRef[1] = 0.0;
-				materials[curr]->mirrorRef[2] = 0.0;
+				materials[curr].mirrorRef[0] = 0.0;
+				materials[curr].mirrorRef[1] = 0.0;
+				materials[curr].mirrorRef[2] = 0.0;
 			}
 
 			materialElement = pMaterial->FirstChildElement("PhongExponent");
 			if(materialElement != nullptr)
             {
-                materialElement->QueryIntText(&materials[curr]->phongExp);
+                materialElement->QueryIntText(&materials[curr].phongExp);
             }
 
 			pMaterial = pMaterial->NextSiblingElement("Material");
 		}
     }
 
-	void ParseLights(tinyxml2::XMLNode* node, std::vector<std::shared_ptr<PointLight>>& lights, Eigen::Vector3f& ambientLight)
+	void ParseLights(tinyxml2::XMLNode* node, std::vector<PointLight>& lights, Eigen::Vector3f& ambientLight)
 	{
 		tinyxml2::XMLElement* lightElement;
 		auto pElement = node->FirstChildElement("Lights");
@@ -128,7 +128,7 @@ namespace Parser
 			ParseVector3Property(pLight, position, "Position");
 			ParseVector3Property(pLight, intensity, "Intensity");
 
-			lights.push_back(std::make_shared<PointLight>(position, intensity));
+			lights.push_back(PointLight(position, intensity));
 
 			pLight = pLight->NextSiblingElement("PointLight");
 		}
@@ -179,7 +179,7 @@ namespace Parser
 		}
     }
 
-    void ParseShapes(tinyxml2::XMLNode* node, std::vector<std::shared_ptr<Shape>>& shapes)
+    void ParseShapes(tinyxml2::XMLNode* node, std::vector<std::unique_ptr<Shape>>& shapes)
     {
         auto pElement = node->FirstChildElement("Objects");
 		
@@ -196,7 +196,7 @@ namespace Parser
             ParseIntegerProperty(pObject, cIndex, "Center");
             ParseFloatProperty(pObject, R, "Radius");
 
-			shapes.push_back(std::make_shared<Sphere>(id, matIndex, cIndex, R));
+			shapes.push_back(std::make_unique<Sphere>(id, matIndex, cIndex, R));
 			pObject = pObject->NextSiblingElement("Sphere");
 		}
 
@@ -212,7 +212,7 @@ namespace Parser
 			auto str = objElement->GetText();
 			sscanf_s(str, "%d %d %d", &p1Index, &p2Index, &p3Index);
 
-			shapes.push_back(std::make_shared<Triangle>(id, matIndex, p1Index, p2Index, p3Index));
+			shapes.push_back(std::make_unique<Triangle>(id, matIndex, p1Index, p2Index, p3Index));
 			pObject = pObject->NextSiblingElement("Triangle");
 		}
 
@@ -266,7 +266,7 @@ namespace Parser
 				faces.push_back(Triangle(-1, matIndex, p1Index, p2Index, p3Index));
 			}
 
-			shapes.push_back(std::make_shared<Mesh>(id, matIndex, faces));
+			shapes.push_back(std::make_unique<Mesh>(id, matIndex, faces));
 
 			pObject = pObject->NextSiblingElement("Mesh");
 		}

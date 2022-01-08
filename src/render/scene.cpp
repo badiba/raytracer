@@ -2,42 +2,41 @@
 #include "../dependencies/tinyxml/tinyxml2.h"
 #include "../utils/parser.hpp"
 
-using namespace tinyxml2;
 using namespace Eigen;
 
-bool Scene::IsShadow(Vector3f point, const PointLight& light)
+bool Scene::IsShadow(const Vector3f& point, const PointLight& light)
 {
-    auto intersection = Intersection();
+    Intersection intersection;
 
-    // Find direction vector from intersection to light.
-    auto direction = light.position - point;
+    // Get direction vector from intersection to light.
+    Vector3f direction = (light.position - point).normalized();
 
     // Create a new ray. Origin is moved with epsilon towards light to avoid self intersection.
-    auto ray = Ray(point + direction * shadowRayEps, direction / direction.norm());
+    Ray ray(point + direction * shadowRayEps, direction);
 
-    // Check intersection of ray with all objects to see if there is a shadow.
-    for (int k = 0; k < shapes.size(); k++)
+    // Check intersection of the ray with all objects to see if there is a shadow.
+    for (const auto& shape : shapes)
     {
         // Get intersection information.
-        intersection = shapes[k]->Intersect(ray);
+        intersection = shape->Intersect(ray);
 
-        // Check if intersected object is between point and light.
-        auto objectBlocksLight = (point - light.position).norm() > (point - intersection.point).norm();
-
-        // If intersection happened and object is blocking the light then there is a shadow.
-        if (intersection.intersected && objectBlocksLight)
+        if (intersection.intersected)
         {
-            return true;
+            // Check if intersected object is between point and light.
+            bool objectBlocksLight = (point - light.position).squaredNorm() > (point - intersection.point).squaredNorm();
+
+            if (objectBlocksLight)
+            {
+                return true;
+            }
         }
     }
 
-    // No shadow, return false.
     return false;
 }
 
 Vector3f Scene::GetSpecularContribution(Ray ray, Intersection intersection, const Material& mat, const PointLight& light)
 {
-    // Compute specular color at given point with given light.
     auto wo = -ray.direction;
     auto wi = (light.position - intersection.point) / (light.position - intersection.point).norm();
     auto h = (wo + wi) / (wo + wi).norm();
@@ -51,11 +50,11 @@ Vector3f Scene::GetSpecularContribution(Ray ray, Intersection intersection, cons
 Vector3f Scene::GetDiffuseContribution(Intersection intersection, const Material& mat, Ray ray, const PointLight& light)
 {
     // Compute diffuse color at given point with given light.
-    auto wi = (light.position - intersection.point) / (light.position - intersection.point).norm();
+    Vector3f wi = (light.position - intersection.point) / (light.position - intersection.point).norm();
     auto nh = intersection.normal.dot(wi);
     auto alpha = std::max(0.0f, nh);
 
-    auto diffuseColor = (light.ComputeLightContribution(intersection.point).cwiseProduct(mat.diffuseRef * alpha));
+    Vector3f diffuseColor = (light.ComputeLightContribution(intersection.point).cwiseProduct(mat.diffuseRef * alpha));
     return diffuseColor;
 }
 
@@ -75,16 +74,16 @@ Color Scene::GetShadingColor(Ray ray, Intersection intersection, const Material&
     auto rawColor = GetAmbientContribution(mat);
 
     // Check shadows for diffuse and specular shading (for every light source).
-    for (auto i = 0; i < lights.size(); i++)
+    for (const auto& light : lights)
     {
-        if (IsShadow(intersection.point, *lights[i]))
+        if (IsShadow(intersection.point, light))
         {
             continue;
         }
 
         // No shadow for this light: Add diffuse and specular shading color.
-        rawColor += GetDiffuseContribution(intersection, mat, ray, *lights[i]);
-        rawColor += GetSpecularContribution(ray, intersection, mat, *lights[i]);
+        rawColor += GetDiffuseContribution(intersection, mat, ray, light);
+        rawColor += GetSpecularContribution(ray, intersection, mat, light);
     }
 
     // Clamp and return.
@@ -96,20 +95,19 @@ Color Scene::GetShadingColor(Ray ray, Intersection intersection, const Material&
 void Scene::Render()
 {
 	// Save an image for all cameras.
-    for (auto i = 0; i < cameras.size(); i++)
+    for (const auto& camera : cameras)
     {
-        auto cam = cameras[i];
         auto ray = Ray();
-        auto width = cam->imgPlane.nx;
-        auto height = cam->imgPlane.ny;
+        auto width = camera.imgPlane.nx;
+        auto height = camera.imgPlane.ny;
         auto image = Image(width, height);
 
         // For every pixel create a ray.
-        for (auto i = 0; i < cam->imgPlane.nx; i++)
+        for (auto i = 0; i < camera.imgPlane.nx; i++)
         {
-            for (auto j = 0; j < cam->imgPlane.ny; j++)
+            for (auto j = 0; j < camera.imgPlane.ny; j++)
             {
-                ray = cam->GetPrimaryRay(i, j);
+                ray = camera.GetPrimaryRay(i, j);
 
                 auto intersection = Intersection();
                 auto nearestIntersection = Intersection();
@@ -120,7 +118,8 @@ void Scene::Render()
                 // Check intersection of the ray with all objects.
                 for (auto k = 0; k < shapes.size(); k++)
                 {
-                    intersection = shapes[k]->Intersect(ray);
+                    auto& shape = shapes[k];
+                    intersection = shape->Intersect(ray);
                     if (intersection.intersected)
                     {
                         // Save the nearest intersected object.
@@ -137,20 +136,24 @@ void Scene::Render()
                 // If intersected with an object, compute shading.
                 if (nearestIntersection.intersected)
                 {
-                    image.SetPixelValue(i, j, GetShadingColor(ray, nearestIntersection,
-                            *materials[shapes[nearestObjectIndex]->materialIndex - 1]));
+                    auto& intersectedObject = shapes[nearestObjectIndex];
+                    auto& material = materials[intersectedObject->materialIndex - 1];
+                    image.SetPixelValue(i, j, GetShadingColor(ray, nearestIntersection, material));
                 }
                 // Else paint with background color.
                 else
                 {
-                    image.SetPixelValue(i, j, Color{ (unsigned char)backgroundColor(0),
-                            (unsigned char)backgroundColor(1),
-                            (unsigned char)backgroundColor(2) });
+                    image.SetPixelValue(i, j, 
+                        Color{ 
+                            (unsigned char)backgroundColor(0), 
+                            (unsigned char)backgroundColor(1), 
+                            (unsigned char)backgroundColor(2) 
+                        });
                 }
             }
         }
 
-        image.SaveImage(cam->imageName);
+        image.SaveImage(camera.imageName);
     }
 }
 
@@ -163,9 +166,9 @@ void Scene::Initialize(const char *xmlPath)
      instance.shadowRayEps = 0.001;
 
      // Load the xml file.
-     XMLDocument xmlDoc;
+     tinyxml2::XMLDocument xmlDoc;
      xmlDoc.LoadFile(xmlPath);
-     XMLNode *pRoot = xmlDoc.FirstChild();
+     tinyxml2::XMLNode *pRoot = xmlDoc.FirstChild();
 
      // Parse scene data.
      Parser::ParseIntegerProperty(pRoot, instance.maxRecursionDepth, "MaxRecursionDepth");

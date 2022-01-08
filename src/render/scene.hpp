@@ -40,15 +40,15 @@ public:
 	Eigen::Vector3f backgroundColor;
 	Eigen::Vector3f ambientLight;
 
-	std::vector<std::shared_ptr<Camera>> cameras;
-	std::vector<std::shared_ptr<PointLight>> lights;
-	std::vector<std::shared_ptr<Material>> materials;
+	std::vector<Camera> cameras;
+	std::vector<PointLight> lights;
+	std::vector<Material> materials;
 	std::vector<Eigen::Vector3f> vertices;
-	std::vector<std::shared_ptr<Shape>> shapes;
+	std::vector<std::unique_ptr<Shape>> shapes;
 
 private:
-    Scene() {}
-	bool IsShadow(Eigen::Vector3f point, const PointLight& light);
+	Scene() {}
+	bool IsShadow(const Eigen::Vector3f& point, const PointLight& light);
 	Eigen::Vector3f GetSpecularContribution(Ray ray, Intersection intersection, const Material& mat, const PointLight& light);
 	Eigen::Vector3f GetDiffuseContribution(Intersection intersection, const Material& mat, Ray ray, const PointLight& light);
 	Eigen::Vector3f GetAmbientContribution(const Material& mat);
