@@ -24,8 +24,7 @@ void Image::SetPixelValue(int col, int row, const Color& color)
 
 void Image::SaveImage(const char *imageName) const
 {
-    std::ofstream myfile;
-    myfile.open(imageName);
+    std::ofstream myfile(imageName);
 
     myfile << "P3" << std::endl;
     myfile << width << " " << height << std::endl;
@@ -35,8 +34,8 @@ void Image::SaveImage(const char *imageName) const
 	{
 		for (auto x = 0 ; x < width; x++)
         {
-            auto pixel = pixels[y][x];
-            myfile << pixel.r << " " << pixel.g << " " << pixel.b << " ";
+            auto& pixel = pixels[y][x];
+            myfile << (unsigned)pixel.r << " " << (unsigned)pixel.g << " " << (unsigned)pixel.b << " ";
         }
 
         myfile << std::endl;
