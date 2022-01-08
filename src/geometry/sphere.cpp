@@ -23,7 +23,7 @@ Intersection Sphere::Intersect(const Ray& ray) const
     const auto& d = ray.direction;
     const auto& o = ray.origin;
     const auto& c = scene.vertices[centerIndex - 1];
-    auto discriminant = ((d.dot(o - c)) * (d.dot(o - c)) - (d.dot(d)) * ((o - c).dot(o - c) - radius * radius));
+    float discriminant = ((d.dot(o - c)) * (d.dot(o - c)) - (d.dot(d)) * ((o - c).dot(o - c) - radius * radius));
 
     if (discriminant < scene.intTestEps)
     {
@@ -31,8 +31,8 @@ Intersection Sphere::Intersect(const Ray& ray) const
         return intersection;
     }
 
-    auto t1 = (-d.dot(o - c) + sqrt(discriminant)) / (d.dot(d));
-    auto t2 = (-d.dot(o - c) - sqrt(discriminant)) / (d.dot(d));
+    float t1 = (-d.dot(o - c) + sqrt(discriminant)) / (d.dot(d));
+    float t2 = (-d.dot(o - c) - sqrt(discriminant)) / (d.dot(d));
     Vector3f intersectionPoint;
 
     if (t2 > t1 && t2 > 0)

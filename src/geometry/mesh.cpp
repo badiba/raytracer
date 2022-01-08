@@ -16,8 +16,8 @@ Intersection Mesh::Intersect(const Ray& ray) const
 	Intersection intersection;
     Intersection nearestIntersection;
     
-    auto distance = 0.0f;
-    auto nearestDistance = std::numeric_limits<float>::max();
+    float distance = 0.0f;
+    float nearestDistance = std::numeric_limits<float>::max();
 
     for (const auto& face : faces)
     {

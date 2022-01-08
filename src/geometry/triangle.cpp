@@ -24,7 +24,7 @@ Intersection Triangle::Intersect(const Ray& ray) const
     const auto& a = scene.vertices[point1Index - 1];
     const auto& b = scene.vertices[point2Index - 1];
     const auto& c = scene.vertices[point3Index - 1];
-    auto normal = (c - b).cross(a - b);
+    Vector3f normal = (c - b).cross(a - b);
 
     Matrix3f matrix, matrixBeta, matrixGamma, matrixT;
     matrix << a - b, a - c, ray.direction;
@@ -32,10 +32,10 @@ Intersection Triangle::Intersect(const Ray& ray) const
     matrixGamma << a - b, a - ray.origin, ray.direction;
     matrixT << a - b, a - c, a - ray.origin;
 
-    auto det = matrix.determinant();
-    auto beta = (matrixBeta).determinant() / (det);
-    auto gamma = (matrixGamma).determinant() / (det);
-    auto t = (matrixT).determinant() / (det);
+    float det = matrix.determinant();
+    float beta = (matrixBeta).determinant() / (det);
+    float gamma = (matrixGamma).determinant() / (det);
+    float t = (matrixT).determinant() / (det);
 
     if (t >= -scene.intTestEps && (beta + gamma <= 1) && beta >= -scene.intTestEps && gamma >= -scene.intTestEps)
     {

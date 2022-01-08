@@ -171,3 +171,8 @@ void Scene::Initialize(const char *xmlPath)
      Parser::ParseShapes(pRoot, instance.shapes);
      Parser::ParseLights(pRoot, instance.lights, instance.ambientLight);
 }
+
+Scene::Scene()
+{
+
+}

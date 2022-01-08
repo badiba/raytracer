@@ -47,7 +47,7 @@ public:
 	std::vector<std::unique_ptr<Shape>> shapes;
 
 private:
-	Scene() {}
+	Scene();
 	bool IsShadow(const Eigen::Vector3f& point, const PointLight& light);
 	Eigen::Vector3f GetSpecularContribution(const Ray& ray, const Intersection& intersection, const Material& mat, const PointLight& light);
 	Eigen::Vector3f GetDiffuseContribution(const Intersection& intersection, const Material& mat, const Ray& ray, const PointLight& light);
