@@ -101,8 +101,8 @@ void Scene::Render()
 
                 Intersection intersection;
                 Intersection nearestIntersection;
-                float returnDistance = 0.0f;
-                float smallestReturnDistance = std::numeric_limits<float>::max();
+                float intersectionDistance = 0.0f;
+                float smallestIntersectionDistance = std::numeric_limits<float>::max();
                 int nearestObjectIndex = 0;
 
                 // Check intersection of the ray with all objects.
@@ -113,11 +113,11 @@ void Scene::Render()
                     if (intersection.intersected)
                     {
                         // Save the nearest intersected object.
-                        returnDistance = (intersection.point - ray.origin).squaredNorm();
-                        if (returnDistance < smallestReturnDistance)
+                        intersectionDistance = (intersection.point - ray.origin).squaredNorm();
+                        if (intersectionDistance < smallestIntersectionDistance)
                         {
                             nearestObjectIndex = k;
-                            smallestReturnDistance = returnDistance;
+                            smallestIntersectionDistance = intersectionDistance;
                             nearestIntersection = intersection;
                         }
                     }
