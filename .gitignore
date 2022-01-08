@@ -1,2 +1,13 @@
 src/dependencies
+src/Debug
 *.exe
+*.sln
+*.user
+*.filters
+*.vcxproj
+*.suo
+*.db
+*.db-shm
+*.db-wal
+*.opendb
+*.ipch
