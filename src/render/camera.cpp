@@ -7,7 +7,7 @@ Camera::Camera(int id, const char* imageName, const Vector3f& pos, const Vector3
     // TODO: Remove this keyword
 	this->id = id;
 	this->imgPlane = imgPlane;
-	strcpy(this->imageName, imageName);
+	strcpy_s(this->imageName, imageName);
 
 	this->gaze = gaze.normalized();
 	auto w = (-gaze).normalized();

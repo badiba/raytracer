@@ -1,4 +1,6 @@
 #include "image.hpp"
+#include <iostream>
+#include <fstream>
 
 Image::Image(int width, int height) : width(width), height(height)
 {
@@ -22,26 +24,23 @@ void Image::SetPixelValue(int col, int row, const Color& color)
 
 void Image::SaveImage(const char *imageName) const
 {
-    // TODO
-	FILE *output;
+    std::ofstream myfile;
+    myfile.open(imageName);
 
-	output = fopen(imageName, "w");
-	fprintf(output, "P3\n");
-	fprintf(output, "%d %d\n", width, height);
-	fprintf(output, "255\n");
+    myfile << "P3" << std::endl;
+    myfile << width << " " << height << std::endl;
+    myfile << "255" << std::endl;
 
 	for (auto y = 0 ; y < height; y++)
 	{
 		for (auto x = 0 ; x < width; x++)
         {
             auto pixel = pixels[y][x];
-            fprintf(output, "%d ", pixel.r);
-            fprintf(output, "%d ", pixel.g);
-            fprintf(output, "%d ", pixel.b);
+            myfile << pixel.r << " " << pixel.g << " " << pixel.b << " ";
         }
 
-		fprintf(output, "\n");
+        myfile << std::endl;
 	}
 
-	fclose(output);
+    myfile.close();
 }

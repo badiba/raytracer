@@ -3,6 +3,7 @@
 
 #include "../defs.hpp"
 #include "../render/ray.hpp"
+#include <vector>
 
 class Shape
 {

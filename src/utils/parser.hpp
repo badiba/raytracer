@@ -5,9 +5,7 @@
 #include "../render/camera.hpp"
 #include "../render/material.hpp"
 #include "../dependencies/eigen-3.4.0/Eigen/Dense"
-#include "../dependencies/tinyxml/tinyxml2.h"
-
-using namespace tinyxml2;
+#include "tinyxml2.h"
 
 namespace Parser
 {
@@ -33,7 +31,7 @@ namespace Parser
     {
         auto pElement = node->FirstChildElement(propertyName);
 		auto str = pElement->GetText();
-		sscanf(str, "%f %f %f", &value[0], &value[1], &value[2]);
+		sscanf_s(str, "%f %f %f", &value[0], &value[1], &value[2]);
     }
 
     void ParseCameras(tinyxml2::XMLNode* node, std::vector<std::shared_ptr<Camera>>& cameras)
@@ -56,17 +54,17 @@ namespace Parser
 
 			camElement = pCamera->FirstChildElement("NearPlane");
 			auto str = camElement->GetText();
-			sscanf(str, "%f %f %f %f", &imgPlane.left, &imgPlane.right, &imgPlane.bottom, &imgPlane.top);
+			sscanf_s(str, "%f %f %f %f", &imgPlane.left, &imgPlane.right, &imgPlane.bottom, &imgPlane.top);
 
             ParseFloatProperty(pCamera, imgPlane.distance, "NearDistance");
 
 			camElement = pCamera->FirstChildElement("ImageResolution");	
 			str = camElement->GetText();
-			sscanf(str, "%d %d", &imgPlane.nx, &imgPlane.ny);
+			sscanf_s(str, "%d %d", &imgPlane.nx, &imgPlane.ny);
 
 			camElement = pCamera->FirstChildElement("ImageName");
 			str = camElement->GetText();
-			strcpy(imageName, str);
+			strcpy_s(imageName, str);
 
 			cameras.push_back(std::make_shared<Camera>(id, imageName, pos, gaze, up, imgPlane));
 
@@ -94,7 +92,7 @@ namespace Parser
 			if (materialElement != nullptr)
 			{
 				auto str = materialElement->GetText();
-				sscanf(str, "%f %f %f", &materials[curr]->mirrorRef[0], &materials[curr]->mirrorRef[1], &materials[curr]->mirrorRef[2]);
+				sscanf_s(str, "%f %f %f", &materials[curr]->mirrorRef[0], &materials[curr]->mirrorRef[1], &materials[curr]->mirrorRef[2]);
 			}
 			else
 			{
@@ -212,7 +210,7 @@ namespace Parser
             ParseIntegerProperty(pObject, matIndex, "Material");
 			objElement = pObject->FirstChildElement("Indices");
 			auto str = objElement->GetText();
-			sscanf(str, "%d %d %d", &p1Index, &p2Index, &p3Index);
+			sscanf_s(str, "%d %d %d", &p1Index, &p2Index, &p3Index);
 
 			shapes.push_back(std::make_shared<Triangle>(id, matIndex, p1Index, p2Index, p3Index));
 			pObject = pObject->NextSiblingElement("Triangle");
