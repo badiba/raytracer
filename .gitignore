@@ -11,3 +11,11 @@ src/Debug
 *.db-wal
 *.opendb
 *.ipch
+*.obj
+*.tlog
+*.pdb
+*.log
+*.ipdb
+*.iobj
+*.recipe
+*.ppm

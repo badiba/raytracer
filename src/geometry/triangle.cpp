@@ -21,9 +21,9 @@ Intersection Triangle::Intersect(const Ray& ray) const
     auto& scene = Scene::Instance();
     Intersection intersection;
 
-    auto a = scene.vertices[point1Index - 1];
-    auto b = scene.vertices[point2Index - 1];
-    auto c = scene.vertices[point3Index - 1];
+    const auto& a = scene.vertices[point1Index - 1];
+    const auto& b = scene.vertices[point2Index - 1];
+    const auto& c = scene.vertices[point3Index - 1];
     auto normal = (c - b).cross(a - b);
 
     Matrix3f matrix, matrixBeta, matrixGamma, matrixT;

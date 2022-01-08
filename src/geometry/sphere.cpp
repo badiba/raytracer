@@ -17,12 +17,12 @@ Sphere::Sphere(int id, int materialIndex, int centerIndex, float radius) : Shape
 
 Intersection Sphere::Intersect(const Ray& ray) const
 {
-    auto& scene = Scene::Instance();
+    const auto& scene = Scene::Instance();
     Intersection intersection;
 
-    auto d = ray.direction;
-    auto o = ray.origin;
-    auto c = scene.vertices[centerIndex - 1];
+    const auto& d = ray.direction;
+    const auto& o = ray.origin;
+    const auto& c = scene.vertices[centerIndex - 1];
     auto discriminant = ((d.dot(o - c)) * (d.dot(o - c)) - (d.dot(d)) * ((o - c).dot(o - c) - radius * radius));
 
     if (discriminant < scene.intTestEps)

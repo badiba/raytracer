@@ -19,9 +19,9 @@ Intersection Mesh::Intersect(const Ray& ray) const
     auto distance = 0.0f;
     auto nearestDistance = std::numeric_limits<float>::max();
 
-    for (auto i = 0; i < faces.size(); i++)
+    for (const auto& face : faces)
     {
-        intersection = faces[i].Intersect(ray);
+        intersection = face.Intersect(ray);
 
         if (intersection.intersected)
         {
